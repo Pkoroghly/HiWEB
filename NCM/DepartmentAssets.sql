@@ -56,3 +56,25 @@ GROUP BY
   GROUP BY AssetType, Vendor, AssetCount: Groups the final results by asset type, vendor, and asset count to ensure distinct combinations.
 "
 
+-- This repository is intended to contain all queries related to the NCM database
+-- for extracting asset brand and asset type of all departments that have nodes
+-- in the NCM module. Please note that this module is responsible for taking backups
+-- of the nodes.
+
+-- Example SQL query for extracting asset brand and asset type
+SELECT
+    department,
+    STUFF((
+        SELECT ', ' + asset_brand
+        FROM ncm_nodes AS n2
+        WHERE n2.department = n1.department
+        FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS asset_brands,
+    STUFF((
+        SELECT ', ' + asset_type
+        FROM ncm_nodes AS n3
+        WHERE n3.department = n1.department
+        FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS asset_types
+FROM
+    ncm_nodes AS n1
+GROUP BY
+    department;
