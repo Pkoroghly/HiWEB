@@ -1,3 +1,29 @@
+	-- This repository is intended to contain all queries related to the NCM database
+-- for extracting asset brand and asset type of all departments that have nodes
+-- in the NCM module. Please note that this module is responsible for taking backups
+-- of the nodes.
+
+-- Example SQL query for counting asset brand and asset type per department
+SELECT
+    department,
+    AssetType,
+    Vendor,
+	MachineType,
+    COUNT(*) AS asset_count
+FROM
+    ncm_nodes
+GROUP BY
+    department,
+    AssetType,
+    Vendor,
+	MachineType
+ORDER BY
+    department,
+    AssetType,
+    Vendor,
+	MachineType;
+
+
 -- Create a subquery to group and count nodes in the ADSL department by asset type and vendor
 WITH DepartmentAssets AS (
     SELECT 
